@@ -6,7 +6,7 @@ Bits = require './bits'
 logger = require './logger'
 
 Bits.set_warning_fatal true
-logger.setLevel logger.LEVEL_INFO
+logger.setLevel logger.LEVEL_DEBUG
 
 streamServer = new StreamServer
 

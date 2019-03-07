@@ -121,6 +121,7 @@ class RTPParser
             packetBuffer.nextSequenceNumber = 0
 
   onH264NALUnit: (clientId, nalUnit, packet, timestamp) ->
+    #logger.warn "rtp: #{timestamp}"
     if not @h264NALUnitBuffer[clientId]?
       @h264NALUnitBuffer[clientId] = []
     @h264NALUnitBuffer[clientId].push nalUnit
@@ -205,8 +206,11 @@ api =
     info.totalBytes = (info.wordsMinusOne + 1) * 4
     info.ssrc = bits.read_bits 32
     info.ntpTimestamp = [ bits.read_bits(32), bits.read_bits(32) ]
+    logger.warn "ntp_raw: #{info.ntpTimestamp}"
     info.ntpTimestampInMs = api.ntpTimestampToTime info.ntpTimestamp
+    logger.warn "ntp_ms: #{info.ntpTimestampInMs}"
     info.rtpTimestamp = bits.read_bits 32
+    logger.warn "rtp_ts: #{info.rtpTimestamp}"
     info.senderPacketCount = bits.read_bits 32
     info.senderOctetCount = bits.read_bits 32
 
@@ -520,8 +524,9 @@ api =
 
   # ntpTimestamp: [ <32-bit second part>, <32-bit fractional second part> ]
   ntpTimestampToTime: (ntpTimestamp) ->
-    sec = ntpTimestamp[0] - EPOCH
+    sec = ntpTimestamp[0] + EPOCH
     ms = ntpTimestamp[1] / NTP_SCALE_FRAC / 1000
+    logger.warn "#{sec} #{ms}"
     return sec * 1000 + ms
 
   # Get NTP timestamp for a time

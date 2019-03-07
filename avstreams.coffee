@@ -105,6 +105,7 @@ class AVStream extends EventEmitterModule
     @videoFrameRate = 30.0  # TODO: What value should we use as a default frame rate?
 
   calcFrameRate: (pts) ->
+    logger.warn "pts: #{pts}"
     if @frameRateCalcBasePTS?
       diffMs = (pts - @frameRateCalcBasePTS) / 90
       if pts isnt @lastPTS

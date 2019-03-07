@@ -155,6 +155,7 @@ class RTSPServer
         return
       sendTime = @getVideoSendTimeForUploadingRTPTimestamp stream, rtpTimestamp
       calculatedPTS = rtpTimestamp - stream.rtspUploadingClient.videoRTPStartTimestamp
+      # logger.info "#{calculatedPTS}, #{rtpParser.info.}"
       @emit 'video', stream, nalUnits, calculatedPTS, calculatedPTS
 
     @rtpParser.on 'aac_access_units', (streamId, accessUnits, rtpTimestamp) =>
